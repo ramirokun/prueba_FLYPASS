@@ -1,4 +1,4 @@
-BUCKET_NAME="file-recolector-timestamp-16-02-2025t"
+BUCKET_NAME="file-recolector-timestamp-16-02-2026"
 S3_PATH="s3://$BUCKET_NAME/outputs/"
 
 while true; do
