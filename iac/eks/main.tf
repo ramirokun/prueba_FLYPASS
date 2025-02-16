@@ -25,9 +25,9 @@ resource "aws_eks_node_group" "node_group" {
   }
 
   ami_type       = "AL2_x86_64"
-  capacity_type  = "SPOT" # Usa instancias Spot para reducir costos
-  disk_size      = 10     # Reducido a 10 GB para minimizar costos
-  instance_types = ["t3.micro"] # Instancia más económica compatible con EKS
+  capacity_type  = "SPOT" 
+  disk_size      = 10     
+  instance_types = ["t3.medium"]
 
   tags = {
     Name     = "${var.name_eks}-single-node"
