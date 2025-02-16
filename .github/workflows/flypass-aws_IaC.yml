@@ -7,11 +7,11 @@ on:
       - feature/*
     paths:
       - 'iac/**'
-  pull_request:
-    branches:
-      - develop
-    paths:
-      - 'iac/**'
+#  pull_request:
+#    branches:
+#      - develop
+#    paths:
+#      - 'iac/**'
   workflow_dispatch:
 
 jobs:
