@@ -13,7 +13,7 @@ tags = {
 }
 network = {
     vpc_cidr    = "172.20.0.0/16"
-    subnet_cidrs = ["172.20.0.0/24", "172.20.2.0/24"]
+    subnet_cidrs = ["172.20.3.0/24", "172.20.4.0/24"]
     availability_zones = ["us-east-1a", "us-east-1b"]
 
 }
