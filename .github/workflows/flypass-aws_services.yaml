@@ -1,0 +1,35 @@
+name: Deploy IP Collector
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'services/**'
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'services/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: (github.event_name == 'push' && github.ref_name == 'develop') || (github.event_name == 'pull_request' && github.ref_name == 'develop' && github.event.action == 'closed' && github.event.pull_request.merged == true)    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy IP Collector
+        run: |
+          aws eks update-kubeconfig --name eks_flypass --region us-east-1
+          kubectl apply -f services/ip-collector.yaml
