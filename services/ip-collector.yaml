@@ -20,7 +20,7 @@ spec:
       containers:
         - name: ip-extractor
           image: amazonlinux
-          command: ["/bin/bash", "-c", "cp /scripts/create_file.sh /tmp/create_file.sh && chmod +x /tmp/create_file.sh && /tmp/create_file.sh"]
+          command: ["/bin/bash", "-c", "cp /scripts/create_file.sh /tmp/create_file.sh && chmod +x /tmp/create_file.sh"]
           volumeMounts:
             - mountPath: /shared-data
               name: shared-data
@@ -28,7 +28,7 @@ spec:
               name: script-volume
         - name: s3-uploader
           image: amazon/aws-cli
-          command: ["/bin/bash", "-c", "cp /scripts/upload_s3.sh /tmp/upload_s3.sh && chmod +x /tmp/upload_s3.sh && /tmp/upload_s3.sh"]
+          command: ["/bin/bash", "-c", "cp /scripts/upload_s3.sh /tmp/upload_s3.sh && chmod +x /tmp/upload_s3.sh"]
           volumeMounts:
             - mountPath: /shared-data
               name: shared-data
