@@ -27,3 +27,4 @@ spec:
           command: ["/bin/bash", "-c", "/scripts/upload_s3.sh"]
           volumeMounts:
             - mountPath: /shared-data
+              name: shared-data
