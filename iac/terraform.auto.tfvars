@@ -1,7 +1,8 @@
 tags = {
     name_ecr = "ecr_flypass"
     name_eks = "eks_flypass"
-    name_role_eks = "role_aks_flypass"
+    name_role_eks = "role_eks_flypass"
+    name_role_nodes_eks = "role_node_eks_flypass"
     name_role_storage = "role_s3_upload"
     name_vpc = "vpc_flypass"
     name_subnet = "subnet_flypass"

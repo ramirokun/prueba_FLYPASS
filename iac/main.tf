@@ -4,6 +4,7 @@ module "iam" {
   name_role_eks= var.tags.name_role_eks
   name_role_storage= var.tags.name_role_storage
   name_s3 = var.tags.name_s3
+  name_role_nodes_eks = var.tags.name_role_nodes_eks
 }
 
 module "network" {
@@ -21,6 +22,7 @@ module "eks" {
   source    = "./eks"
   subnet_ids   = module.network.subnet_ids
   role_arn =   module.iam.eks_role_arn
+  name_role_nodes_eks = module.iam.node_role_arn
   name_eks = var.tags.name_eks
   username= var.tags.username
     depends_on = [module.network,
