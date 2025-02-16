@@ -6,7 +6,7 @@ tags = {
     name_vpc = "vpc_flypass"
     name_subnet = "subnet_flypass"
     az       = "us-east-1a"
-    name_s3 = "file-recolector-timestamp-16-02-2025"
+    name_s3 = "file-recolector-timestamp-16-02-2026"
     name_repo = "repo_flipass"
     username= "RamiroMeneses"
 }
