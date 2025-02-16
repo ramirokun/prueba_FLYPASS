@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: ip-collector-deployment
 spec:
-  replicas: 3  # Esto creará 3 pods
   selector:
     matchLabels:
       app: ip-collector
@@ -15,6 +14,9 @@ spec:
       volumes:
         - name: shared-data
           emptyDir: {}
+        - name: script-volume
+          configMap:
+            name: script-config
       containers:
         - name: ip-extractor
           image: amazonlinux
@@ -22,6 +24,8 @@ spec:
           volumeMounts:
             - mountPath: /shared-data
               name: shared-data
+            - mountPath: /scripts
+              name: script-volume
         - name: s3-uploader
           image: amazon/aws-cli
           command: ["/bin/bash", "-c", "/scripts/upload_s3.sh"]
