@@ -43,6 +43,7 @@ Estructura del Proyecto
         ├── create_file.sh
         └── upload_s3.sh
 ```
+
 ¿Qué hay en cada carpeta?
 
 .github/workflows/
