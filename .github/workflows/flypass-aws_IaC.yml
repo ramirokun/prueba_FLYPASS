@@ -1,0 +1,85 @@
+name: Deploy Infra
+
+on:
+  push:
+    branches:
+      - develop
+      - feature/*
+    paths:
+      - 'iac/**'
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'iac/**'
+  workflow_dispatch:
+
+jobs:
+  feature-branch:
+    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/feature/')    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1        
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.5
+
+      - name: Initialize Terraform
+        run: |
+          cd iac
+          terraform init -backend-config="bucket=terraform-state-16-02-2025" -backend-config="key=infraestructura/terraform.tfstate" -backend-config="region=us-east-1" -backend-config="dynamodb_table=terraform-lock"
+
+      - name: Validate Terraform
+        run: |
+          cd iac
+          terraform validate
+
+      - name: Terraform Plan
+        run: |
+          cd iac
+          terraform plan
+
+  deploy: 
+    if: (github.event_name == 'push' && github.ref_name == 'develop') || (github.event_name == 'pull_request' && github.ref_name == 'develop' && github.event.action == 'closed' && github.event.pull_request.merged == true)    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.5
+
+      - name: Initialize Terraform
+        run: |
+          cd iac
+          terraform init -backend-config="bucket=terraform-state-16-02-2025" -backend-config="key=infraestructura/terraform.tfstate" -backend-config="region=us-east-1" -backend-config="dynamodb_table=terraform-lock"
+
+      - name: Terraform Plan
+        run: |
+          cd iac
+          terraform plan       
+
+      - name: Apply Terraform
+        run: |
+          cd iac
+          terraform apply -auto-approve

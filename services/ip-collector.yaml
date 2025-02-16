@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ip-collector-deployment
+spec:
+  replicas: 3  # Esto creará 3 pods
+  selector:
+    matchLabels:
+      app: ip-collector
+  template:
+    metadata:
+      labels:
+        app: ip-collector
+    spec:
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+      containers:
+        - name: ip-extractor
+          image: amazonlinux
+          command: ["/bin/bash", "-c", "/scripts/create_file.sh"]
+          volumeMounts:
+            - mountPath: /shared-data
+              name: shared-data
+        - name: s3-uploader
+          image: amazon/aws-cli
+          command: ["/bin/bash", "-c", "/scripts/upload_s3.sh"]
+          volumeMounts:
+            - mountPath: /shared-data
+              name: shared-data
