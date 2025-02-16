@@ -11,5 +11,4 @@ while true; do
     echo "Private IP: $PRIVATE_IP" > "$OUTPUT_FILE"
     echo "Saved IP to $OUTPUT_FILE"
 
-    sleep 3600  # Espera 1 hora antes de repetir
-done
+    sleep 3600  
