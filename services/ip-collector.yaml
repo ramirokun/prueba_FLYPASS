@@ -32,3 +32,4 @@ spec:
           volumeMounts:
             - mountPath: /shared-data
               name: shared-data
+#comentario de prueba

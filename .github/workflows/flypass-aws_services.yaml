@@ -29,7 +29,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Deploy IP Collector
+      - name: Configure kubectl
+        run: aws eks update-kubeconfig --name eks_flypass --region us-east-1
+
+      - name: Create or Update ConfigMap
         run: |
-          aws eks update-kubeconfig --name eks_flypass --region us-east-1
-          kubectl apply -f services/ip-collector.yaml
+          kubectl create configmap script-config \
+            --from-file=services/scripts/create_file.sh \
+            --from-file=services/scripts/upload_s3.sh \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy IP Collector
+        run: kubectl apply -f services/ip-collector.yaml
