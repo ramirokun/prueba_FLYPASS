@@ -6,7 +6,7 @@ Este repo tiene todo lo necesario para levantar infraestructura en AWS usando Te
 
 Estructura del Proyecto
 
-.
+'''.
 ├── .github
 │   └── workflows
 │       ├── flypass-aws_IaC.yml
@@ -42,7 +42,7 @@ Estructura del Proyecto
     └── scripts
         ├── create_file.sh
         └── upload_s3.sh
-
+'''
 ¿Qué hay en cada carpeta?
 
 .github/workflows/
