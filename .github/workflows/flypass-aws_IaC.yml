@@ -37,7 +37,7 @@ jobs:
       - name: Initialize Terraform
         run: |
           cd iac
-          terraform init
+          terraform init -backend-config="bucket=terraform-state-16-02-2025" -backend-config="key=infraestructura/terraform.tfstate" -backend-config="region=us-east-1" -backend-config="dynamodb_table=terraform-lock"
 
       - name: Validate Terraform
         run: |
@@ -73,7 +73,7 @@ jobs:
       - name: Initialize Terraform
         run: |
           cd iac
-          terraform init
+          terraform init -backend-config="bucket=terraform-state-16-02-2025" -backend-config="key=infraestructura/terraform.tfstate" -backend-config="region=us-east-1" -backend-config="dynamodb_table=terraform-lock"
 
       - name: Apply Terraform
         run: |
