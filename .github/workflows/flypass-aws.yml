@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/*
     paths:
       - 'iac/**'
   pull_request:
