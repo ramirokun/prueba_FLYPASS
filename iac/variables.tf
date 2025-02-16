@@ -3,7 +3,6 @@ variable "tags" {
     type = map(any)  
 }
 
-#agregado de comentario temporal 
 
 variable "network" {
     description = "variables necesarias para network"
