@@ -18,17 +18,17 @@ module "network" {
   username= var.tags.username
 }
 
-#module "eks" {
-#  source    = "./eks"
-#  subnet_ids   = module.network.subnet_ids
-#  role_arn =   module.iam.eks_role_arn
-#  name_role_nodes_eks = module.iam.node_role_arn
-#  name_eks = var.tags.name_eks
-#  username= var.tags.username
-#    depends_on = [module.network,
-#                module.iam.eks_role_arn         
-#                ]
-#}
+module "eks" {
+  source    = "./eks"
+  subnet_ids   = module.network.subnet_ids
+  role_arn =   module.iam.eks_role_arn
+  name_role_nodes_eks = module.iam.node_role_arn
+  name_eks = var.tags.name_eks
+  username= var.tags.username
+    depends_on = [module.network,
+                module.iam.eks_role_arn         
+                ]
+}
 
 module "s3" {
   source      = "./s3"
