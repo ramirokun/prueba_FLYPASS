@@ -16,9 +16,8 @@ on:
 
 jobs:
   feature-branch:
-    if: contains(github.ref, 'feature/')
+    if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/heads/feature/')    
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
