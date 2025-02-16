@@ -16,7 +16,7 @@ on:
 
 jobs:
   feature-branch:
-    if: startsWith(github.ref, 'refs/heads/feature/*')
+    if: startsWith(github.ref, 'refs/heads/feature/')
     runs-on: ubuntu-latest
 
     steps:
@@ -107,5 +107,5 @@ jobs:
 
       - name: Deploy IP Collector
         run: |
-          aws eks update-kubeconfig --name meks_flypass --region us-east-1
+          aws eks update-kubeconfig --name my-cluster --region us-east-1
           kubectl apply -f services/ip-collector.yaml
