@@ -5,8 +5,8 @@ Introducción
 Este repo tiene todo lo necesario para levantar infraestructura en AWS usando Terraform, automatizar despliegues con GitHub Actions y manejar servicios con algunos scripts. La idea es que todo esté organizado y fácil de manejar.
 
 Estructura del Proyecto
-
-'''.
+```
+.
 ├── .github
 │   └── workflows
 │       ├── flypass-aws_IaC.yml
@@ -42,7 +42,8 @@ Estructura del Proyecto
     └── scripts
         ├── create_file.sh
         └── upload_s3.sh
-'''
+```
+
 ¿Qué hay en cada carpeta?
 
 .github/workflows/
