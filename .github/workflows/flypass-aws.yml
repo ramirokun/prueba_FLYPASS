@@ -1,70 +1,110 @@
-name: Terraform AWS Deployment
+name: Deploy Infra
 
 on:
   push:
     branches:
-      - "feature/*"
-      - "develop"
-
-permissions:
-  contents: read
+      - develop
+    paths:
+      - 'iac/**'
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'iac/**'
+  workflow_dispatch:
 
 jobs:
-  terraform-feature:
-    if: startsWith(github.ref, 'refs/heads/feature/')
-    name: Terraform Plan (Feature Branch)
+  feature-branch:
+    if: startsWith(github.ref, 'refs/heads/feature/*')
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🚀 Checkout Repository
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: 🛠️ Set up Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.10.3
+          terraform_version: 1.10.5
 
-      - name: 🔑 Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+      - name: Initialize Terraform
+        run: |
+          cd iac
+          terraform init
 
-      - name: 📌 Terraform Init
-        run: terraform init
+      - name: Validate Terraform
+        run: |
+          cd iac
+          terraform validate
 
-      - name: ✅ Terraform Validate
-        run: terraform validate
+      - name: Terraform Plan
+        run: |
+          cd iac
+          terraform plan
 
-      - name: 📋 Terraform Plan
-        run: terraform plan -out=tfplan
-
-  terraform-develop:
+  deploy:
     if: github.ref == 'refs/heads/develop'
-    name: Terraform Apply (Develop Branch)
     runs-on: ubuntu-latest
+    needs: feature-branch
 
     steps:
-      - name: 🚀 Checkout Repository
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: 🛠️ Set up Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.10.3
-
-      - name: 🔑 configuracion de credenciales
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: 📌 Terraform Init
-        run: terraform init
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.5
 
-        
+      - name: Initialize Terraform
+        run: |
+          cd iac
+          terraform init
 
-      - name: 🚀 Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Apply Terraform
+        run: |
+          cd iac
+          terraform apply -auto-approve
+
+---
+name: Deploy IP Collector
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'services/**'
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - 'services/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy IP Collector
+        run: |
+          aws eks update-kubeconfig --name meks_flypass --region us-east-1
+          kubectl apply -f services/ip-collector.yaml

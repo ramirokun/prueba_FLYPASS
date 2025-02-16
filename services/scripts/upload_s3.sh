@@ -1,4 +1,4 @@
-BUCKET_NAME="mi-bucket"
+BUCKET_NAME="file-recolector-timestamp-16-02-2025t"
 S3_PATH="s3://$BUCKET_NAME/outputs/"
 
 while true; do
