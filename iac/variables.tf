@@ -2,7 +2,6 @@ variable "tags" {
     description = "tags para los ambientes"
     type = map(any)  
 }
-#agregado de comentario
 
 variable "network" {
     description = "variables necesarias para network"
